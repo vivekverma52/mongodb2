@@ -9,7 +9,7 @@ app.use(express.static(__dirname))
 app.use(express.urlencoded({ extended: true}))
 
 
-mongoose.connect('mongodb://127.0.0.1:27017/students')
+mongoose.connect('mongodb+srv://567vivekverma:vivekverma@vivek5678.ik6ogcr.mongodb.net/mongodb?retryWrites=true&w=majority&appName=vivek5678')
 const db = mongoose.connection
 db.once('open', () =>{
     console.log("Connected to MongoDB")
@@ -30,6 +30,7 @@ app.get('/', (req, res) => {
 
 
 app.post('/post',async (req, res) => {
+  try{
     const { regd_no, name, email, branch } = req.body
     const user = new Users({
         regd_no,
@@ -40,6 +41,12 @@ app.post('/post',async (req, res) => {
     await user.save()
     console.log(user)
     res.send("Form submitted successfully")
+  }
+  catch(e){
+    console.log(e)
+    res.status(500).send('Error saving data')
+    return  // stop further execution if error occurs
+  }
 })
 
 app.listen(port,()=>{
